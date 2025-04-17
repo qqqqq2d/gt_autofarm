@@ -54,7 +54,7 @@ void auto_cycle() {
 
         if (start_auto_cycle.load()) {
             std::cout << "autofarm loop: " << std::ctime(&end_time);
-            system("xdotool mousemove 849 569");
+            system("xdotool mousemove 829 520");
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             system("xdotool click 1");
             std::this_thread::sleep_for(std::chrono::milliseconds(200));
@@ -73,19 +73,22 @@ void auto_cycle() {
     }
 }
 
+int level;
+
 void break_position() {
     std::cout << "Going to break position" << std::endl;
-    int level = 1;
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     system("xdotool keydown 'a' && sleep 0.5 && xdotool keyup 'a'");
     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
     system("xdotool keydown 'a' && sleep 0.5 && xdotool keyup 'a'");
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    system("xdotool keydown 'd' && sleep 0.05 && xdotool keyup 'd'");
+    system("xdotool keydown 'd' && sleep 0.1 && xdotool keyup 'd'");
     for (int j = 0;j < level; j++) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(300));
         system("xdotool keydown w && sleep 0.1 && xdotool keyup w");
     }
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    system("xdotool keydown 'a' && sleep 0.03 && xdotool keyup 'a'");    
 
     std::cout << "Position reached!" << std::endl;
 }
@@ -99,7 +102,7 @@ void escape_news() {
 
 void select_lgrid() {
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
-    system("sleep 0.5 && xdotool mousemove 922 888 && xdotool click 1");
+    system("sleep 0.5 && xdotool mousemove 920 884 && xdotool click 1");
 }
 
 int main() {
@@ -143,6 +146,9 @@ int main() {
     
     std::cout << "Window found: " << grow_window << std::endl;
     
+    std::cout << "Level (1): ";
+    std::cin >> level;
+
     std::cout << "(L)oad or (n)ew?" << ' ';
     char choice;
     std::cin >> choice;
@@ -263,9 +269,9 @@ int main() {
                 correct_pixel++;
             }
         }
-        if (c[pixel_count-3].red/256 != 96 &&
-            c[pixel_count-3].green/256 != 242 &&
-            c[pixel_count-3].blue/256 != 215){
+        if (c[4].red/256 != 96 &&
+            c[4].green/256 != 242 &&
+            c[4].blue/256 != 215){
 
             std::cout << "Paused" << std::endl;
             break;
@@ -273,9 +279,9 @@ int main() {
         }
 
         
-        if ((c[pixel_count-2].red/256 != 39 &&
-            c[pixel_count-2].green/256 != 125 &&
-            c[pixel_count-2].blue/256 != 159) && max_item_timer >= 1000){
+        if ((c[5].red/256 != 39 &&
+            c[5].green/256 != 125 &&
+            c[5].blue/256 != 159) && max_item_timer >= 1000){
 
             std::cout << "Empty!" << std::endl;
             need_jump = true;
@@ -283,9 +289,9 @@ int main() {
             //return 0;
         }
         
-        if ((c[pixel_count-2].red/256 == 39 &&
-            c[pixel_count-2].green/256 == 125 &&
-            c[pixel_count-2].blue/256 == 159)){
+        if ((c[5].red/256 == 39 &&
+            c[5].green/256 == 125 &&
+            c[5].blue/256 == 159)){
 
             max_item_timer = 0;
             max_item_timer_start = true;
@@ -309,7 +315,7 @@ int main() {
             max_item_timer++;
         }
 
-        //std::cout << max_item_timer << std::endl;
+        //std::cout << "Max item timer:" << max_item_timer << std::endl;
         
         if (!detected_place && cooldown == 40) {
             x.store(cooldown2);
@@ -329,6 +335,7 @@ int main() {
         need_jump = false;
         system("sleep 0.5 && xdotool keydown w && sleep 0.1 && xdotool keyup w");
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	level++;
         goto main_label;
     }
 
@@ -355,29 +362,33 @@ int main() {
             XNextEvent(display, &event);    
         }
 
-        if (c[pixel_count-1].red/256 == 46 && // 74 54 34
-            c[pixel_count-1].green/256 == 113 &&
-            c[pixel_count-1].blue/256 == 137 && !found_dirt){
+        if (c[6].red/256 == 46 && // 74 54 34
+            c[6].green/256 == 113 &&
+            c[6].blue/256 == 137 && !found_dirt){
             found_dirt = true;
             std::cout << "Found dirt" << std::endl;
             escape_news();
 
         }
         
-        if (c[pixel_count-3].red/256 == 96 &&
-            c[pixel_count-3].green/256 == 215 &&
-            c[pixel_count-3].blue/256 == 242){
+        if ((c[4].red/256 == 96 &&
+            c[4].green/256 == 215 &&
+            c[4].blue/256 == 242) &&
+
+	    c[7].red/256 == 96 &&
+            c[7].green/256 == 215 &&
+            c[7].blue/256 == 242){
 
             //std::cout << "hello" << std::endl;
             
             world_timer++;
-            std::cout << "World timer: " << world_timer << std::endl;
+            std::cout << "World timer:" << world_timer << std::endl;
         }
         else {
             world_timer = 0;
         }
         
-        if (world_timer >= 500) {
+        if (world_timer >= 200) {
             world_timer_start = false;
 
             std::cout << "Selecting lgrid" << std::endl;

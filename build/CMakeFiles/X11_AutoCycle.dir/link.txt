@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/X11_AutoCycle.dir/link.d CMakeFiles/X11_AutoCycle.dir/main.cpp.o -o X11_AutoCycle  /usr/lib64/libSM.so /usr/lib64/libICE.so /usr/lib64/libX11.so /usr/lib64/libXext.so -lX11 -lXext -lXrender -lXft -lXinerama -lpthread

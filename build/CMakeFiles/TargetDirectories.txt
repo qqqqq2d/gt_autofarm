@@ -1,3 +1,0 @@
-/home/mattias/prog/x11_gt/autofarm/build/CMakeFiles/X11_AutoCycle.dir
-/home/mattias/prog/x11_gt/autofarm/build/CMakeFiles/edit_cache.dir
-/home/mattias/prog/x11_gt/autofarm/build/CMakeFiles/rebuild_cache.dir
