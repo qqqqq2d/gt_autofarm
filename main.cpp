@@ -54,7 +54,7 @@ void auto_cycle() {
 
         if (start_auto_cycle.load()) {
             std::cout << "autofarm loop: " << std::ctime(&end_time);
-            system("xdotool mousemove 828 577");
+            system("xdotool mousemove 828 590");
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             system("xdotool click 1");
             std::this_thread::sleep_for(std::chrono::milliseconds(200));
@@ -121,8 +121,29 @@ void close_chat() {
     }
 }
 
+void cancel_and_play() {
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    system("xdotool mousemove 655 876 && xdotool mousedown 1 && sleep 0.2 && xdotool mouseup 1 && sleep 2 && xdotool mousemove 934 623 && xdotool mousedown 1 && sleep 0.2 && xdotool mouseup 1");
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+    //escape_news();
+    //system("xdotool mousemove 1204 816 && xdotool mousedown 1 && sleep 0.2 && xdotool mouseup 1");
+    //std::cout << "Cancel and play done" << std::endl;
+}
+
+int get_state() {
+
+    //0 - breaking
+    //1 - connection screen
+    //2 - main menu
+    
+    int state;
+    return state;
+}
+
 int main() {
 
+    
     //break_position();
     //escape_news();
     
@@ -336,6 +357,8 @@ int main() {
             max_item_timer++;
         }
 
+        
+        
         //std::cout << "Max item timer:" << max_item_timer << std::endl;
         
         if (!detected_place && cooldown == 40) {
@@ -362,6 +385,7 @@ int main() {
 
     bool world_timer_start{false};
     int world_timer = 0;
+    int login_screen_timer = 0;
     
     window = (Window)strtoul(p_0, NULL, 0);
     XSelectInput(display, window, KeyPressMask);
@@ -421,6 +445,35 @@ int main() {
             break_position();
 
             goto main_label;
+        }
+
+        if (c[8].red/256 == 23 && // 74 54 34
+            c[8].green/256 == 84 &&
+            c[8].blue/256 == 111){
+
+            std::cout << "Login screen" << std::endl;
+            login_screen_timer++;
+            std::cout << "Login scren timer: " << login_screen_timer << std::endl;
+        }
+        
+        
+        if (c[8].red/256 == 23 && // 74 54 34
+            c[8].green/256 == 84 &&
+            c[8].blue/256 == 111 && login_screen_timer >= 500){
+            login_screen_timer = 0;
+            cancel_and_play();
+
+        }
+
+        if (c[9].red/256 == 33 && // 74 54 34
+            c[9].green/256 == 106 &&
+            c[9].blue/256 == 135){
+            std::cout << "Logged in" << std::endl;
+                
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            system("xdotool mousemove 1204 816 && xdotool mousedown 1 && sleep 0.2 && xdotool mouseup 1");
+            std::cout << "Cancel and play done" << std::endl;
+                
         }
         
         if (event.type == KeyPress) {
