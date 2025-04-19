@@ -54,7 +54,7 @@ void auto_cycle() {
 
         if (start_auto_cycle.load()) {
             std::cout << "autofarm loop: " << std::ctime(&end_time);
-            system("xdotool mousemove 829 520");
+            system("xdotool mousemove 828 577");
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             system("xdotool click 1");
             std::this_thread::sleep_for(std::chrono::milliseconds(200));
@@ -88,7 +88,7 @@ void break_position() {
         system("xdotool keydown w && sleep 0.1 && xdotool keyup w");
     }
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    system("xdotool keydown 'a' && sleep 0.03 && xdotool keyup 'a'");    
+    system("xdotool keydown 'a' && sleep 0.05 && xdotool keyup 'a'");    
 
     std::cout << "Position reached!" << std::endl;
 }
@@ -103,6 +103,22 @@ void escape_news() {
 void select_lgrid() {
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
     system("sleep 0.5 && xdotool mousemove 920 884 && xdotool click 1");
+}
+
+void close_chat() {
+    int mousepos_x = 970;
+    int mousepos_y = 650;
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    while (true) {
+        std::string mousepos = std::to_string(mousepos_x) + ' ' + std::to_string(mousepos_y);
+        std::string mousecmd = "xdotool mousemove " + mousepos + " && xdotool mousedown 1 && sleep 0.2 && xdotool mouseup 1";
+        const char* cmd = mousecmd.c_str();
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        system(cmd);
+        mousepos_y = mousepos_y-20;
+        //system("xdotool mousemove 970 650 && xdotool mousedown 1 && sleep 0.5 && xdotool mouseup 1");
+    }
 }
 
 int main() {
@@ -295,9 +311,14 @@ int main() {
 
             max_item_timer = 0;
             max_item_timer_start = true;
+			
             //return 0;
         }
         
+		if (max_item_timer == 1) {
+			std::cout << "Max item" << std::endl;
+		}
+
         if (correct_pixel == pixel_count-1) {
             cooldown = 0;
             cooldown_start = true;
@@ -319,7 +340,7 @@ int main() {
         
         if (!detected_place && cooldown == 40) {
             x.store(cooldown2);
-            cooldown2 = 0;
+            cooldown2 = 0; 
             cooldown2_start = true;
             cooldown_start = false;
             detected_place = true;
@@ -362,9 +383,9 @@ int main() {
             XNextEvent(display, &event);    
         }
 
-        if (c[6].red/256 == 46 && // 74 54 34
-            c[6].green/256 == 113 &&
-            c[6].blue/256 == 137 && !found_dirt){
+        if (c[6].red/256 == 49 && // 74 54 34
+            c[6].green/256 == 141 &&
+            c[6].blue/256 == 174 && !found_dirt){
             found_dirt = true;
             std::cout << "Found dirt" << std::endl;
             escape_news();
