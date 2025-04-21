@@ -285,12 +285,23 @@ int main() {
 
     bool max_item_timer_start{false};
     int max_item_timer = 0;
+    int break_counter = 0;
+    bool break_counter_start{false};
     
     main_label:
 
     std::cout << "main while loop" << std::endl;
 
     while(true){
+
+        if (break_counter_start) {
+            break_counter++;
+        }
+
+        if (break_counter > 1000) {
+            exit(1);
+        }
+        
         for (int i = 0;i<pixel_count;i++) {
             image[i] = XGetImage(display, XRootWindow (display, XDefaultScreen (display)), pixel[i].x, pixel[i].y, 1, 1, AllPlanes, XYPixmap);
             c[i].pixel = XGetPixel(image[i], 0, 0);
@@ -340,11 +351,17 @@ int main() {
 			std::cout << "Max item" << std::endl;
 		}
 
-        if (correct_pixel == pixel_count-1) {
+        if (correct_pixel == 4) {
             cooldown = 0;
             cooldown_start = true;
             detected_place = false;
+
+            break_counter = 0;
+            break_counter_start = true;
         }
+
+        //std::cout << break_counter << std::endl;
+        
         correct_pixel = 0;
         if (cooldown_start){
             cooldown++;
@@ -356,8 +373,6 @@ int main() {
         if (max_item_timer_start) {
             max_item_timer++;
         }
-
-        
         
         //std::cout << "Max item timer:" << max_item_timer << std::endl;
         
