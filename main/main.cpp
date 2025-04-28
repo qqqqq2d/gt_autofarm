@@ -44,7 +44,7 @@ std::string exec(const char* cmd) {
 }
 
 void auto_cycle() {
-    int delay = 2200;
+    int delay = 3300;
     while(true) {
 
         auto start = std::chrono::system_clock::now();
@@ -143,7 +143,6 @@ int get_state() {
 
 int main() {
 
-    
     //break_position();
     //escape_news();
     
@@ -292,6 +291,11 @@ int main() {
 
     std::cout << "main while loop" << std::endl;
 
+    Pixel bg;
+    bg.red = 0;
+    bg.green = 12;
+    bg.blue = 11;
+        
     while(true){
 
         if (break_counter_start) {
@@ -317,9 +321,10 @@ int main() {
                 correct_pixel++;
             }
         }
-        if (c[4].red/256 != 96 &&
-            c[4].green/256 != 242 &&
-            c[4].blue/256 != 215){
+
+        if (c[4].red/256 != bg.red ||
+            c[4].green/256 != bg.green ||
+            c[4].blue/256 != bg.blue){
 
             std::cout << "Paused" << std::endl;
             break;
@@ -406,6 +411,11 @@ int main() {
     XSelectInput(display, window, KeyPressMask);
 
     bool found_dirt{false};
+
+    Pixel newsbg;
+    newsbg.red = 32;
+    newsbg.green = 104;
+    newsbg.blue = 132;
     
     while(true) {
 
@@ -422,22 +432,22 @@ int main() {
             XNextEvent(display, &event);    
         }
 
-        if (c[6].red/256 == 49 && // 74 54 34
-            c[6].green/256 == 141 &&
-            c[6].blue/256 == 174 && !found_dirt){
+        if (c[6].red/256 == newsbg.red && // 74 54 34
+            c[6].green/256 == newsbg.green &&
+            c[6].blue/256 == newsbg.blue && !found_dirt){
             found_dirt = true;
             std::cout << "Found dirt" << std::endl;
             escape_news();
 
         }
         
-        if ((c[4].red/256 == 96 &&
-            c[4].green/256 == 215 &&
-            c[4].blue/256 == 242) &&
+        if ((c[4].red/256 == bg.red &&
+            c[4].green/256 == bg.green &&
+            c[4].blue/256 == bg.blue) &&
 
-	    c[7].red/256 == 96 &&
-            c[7].green/256 == 215 &&
-            c[7].blue/256 == 242){
+	    c[7].red/256 == bg.red &&
+            c[7].green/256 == bg.green &&
+            c[7].blue/256 == bg.blue){
 
             //std::cout << "hello" << std::endl;
             
